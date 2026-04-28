@@ -1,5 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // Nuxt 4 behavior enablement
+  future: {
+    compatibilityVersion: 4,
+  },
+
   app: {
     head: {
       title: 'FaultGuard AI - Smart Fault Detection System',
@@ -19,6 +24,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
 
+  // Nuxt 4 with app/ directory expects relative paths or ~/
   css: ['~/assets/css/main.css'],
 
   tailwindcss: {
