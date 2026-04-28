@@ -126,28 +126,3 @@ const printReport = () => window.print()
 }
 .animate-shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
 </style>
-, 1500)
-}
-
-const resetAnalysis = () => {
-  result.value = null
-  fileData.value = null
-  fileName.value = ''
-}
-
-const printReport = () => window.print()
-</script>
-
-<style scoped>
-.slide-up-enter-active,
-.slide-up-leave-active { transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
-.slide-up-enter-from { opacity: 0; transform: translateY(30px) scale(0.98); }
-.slide-up-leave-to { opacity: 0; transform: translateY(-30px) scale(0.98); }
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-.animate-shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
-</style>
