@@ -1,3 +1,15 @@
+<script setup>
+const { startPolling, stopPolling } = useBackendStatus()
+
+onMounted(() => {
+  startPolling(5000) // Poll every 5 seconds
+})
+
+onUnmounted(() => {
+  stopPolling()
+})
+</script>
+
 <template>
   <div>
     <NuxtLayout>

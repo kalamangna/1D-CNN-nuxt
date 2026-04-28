@@ -16,15 +16,7 @@
           >Main Stage</span
         >
       </NuxtLink>
-      <div
-        class="flex items-center gap-3 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200"
-      >
-        <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
-        <span
-          class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
-          >Logic Flow v1.0</span
-        >
-      </div>
+      <BackendStatus />
     </header>
 
     <div class="w-full max-w-4xl">

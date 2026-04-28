@@ -7,10 +7,7 @@
           <i class="fa-solid fa-arrow-left text-[10px] text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
           <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900 transition-colors">Main Stage</span>
        </NuxtLink>
-       <div class="flex items-center gap-3 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200">
-          <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Neural Link Active</span>
-       </div>
+       <BackendStatus />
     </header>
 
     <div class="w-full max-w-3xl space-y-12 animate-in fade-in zoom-in-95 duration-700">
@@ -105,6 +102,31 @@ const handleAnalysis = async () => {
     } catch (e) { error.value = 'API Offline' }
     finally { loading.value = false }
   }, 1500)
+}
+
+const resetAnalysis = () => {
+  result.value = null
+  fileData.value = null
+  fileName.value = ''
+}
+
+const printReport = () => window.print()
+</script>
+
+<style scoped>
+.slide-up-enter-active,
+.slide-up-leave-active { transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.slide-up-enter-from { opacity: 0; transform: translateY(30px) scale(0.98); }
+.slide-up-leave-to { opacity: 0; transform: translateY(-30px) scale(0.98); }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.animate-shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
+</style>
+, 1500)
 }
 
 const resetAnalysis = () => {

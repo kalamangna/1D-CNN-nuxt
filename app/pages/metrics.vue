@@ -7,10 +7,7 @@
           <i class="fa-solid fa-arrow-left text-[10px] text-slate-400 group-hover:text-indigo-600"></i>
           <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900">Main Stage</span>
        </NuxtLink>
-       <div class="flex items-center gap-3 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 shadow-sm">
-          <i class="fa-solid fa-chart-line text-[10px]"></i>
-          <span class="text-[10px] font-bold uppercase tracking-widest">Performance Audit</span>
-       </div>
+       <BackendStatus />
     </header>
 
     <div class="max-w-6xl mx-auto space-y-12 animate-in fade-in zoom-in-95 duration-700">

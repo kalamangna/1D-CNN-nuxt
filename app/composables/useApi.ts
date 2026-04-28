@@ -39,9 +39,22 @@ export const useApi = () => {
     }
   }
 
+  /**
+   * Checks the health of the backend API.
+   */
+  const checkHealth = async () => {
+    try {
+      const response = await $fetch(`${API_BASE_URL}/health`)
+      return response
+    } catch (error) {
+      return null
+    }
+  }
+
   return {
     predictFault,
     getMetrics,
+    checkHealth,
     API_BASE_URL
   }
 }
