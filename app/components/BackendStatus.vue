@@ -11,7 +11,7 @@
       class="text-[10px] font-bold uppercase tracking-widest"
       :class="isOnline ? 'text-emerald-600' : 'text-rose-600'"
     >
-      {{ isOnline ? 'Neural Link Online' : 'Neural Link Offline' }}
+      {{ isOnline ? '1D-CNN Link Online' : '1D-CNN Link Offline' }}
     </span>
   </div>
 </template>

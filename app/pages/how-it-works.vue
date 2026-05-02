@@ -13,7 +13,7 @@
         ></i>
         <span
           class="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900 transition-colors"
-          >Main Stage</span
+          >Home</span
         >
       </NuxtLink>
       <BackendStatus />
@@ -24,10 +24,10 @@
         <h1
           class="text-5xl font-[900] text-slate-900 uppercase tracking-tighter italic mb-4"
         >
-          Neural <span class="text-indigo-600">Pipeline</span>
+          System <span class="text-indigo-600">Architecture</span>
         </h1>
-        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs">
-          Architectural Logic & Data Transformation Journey
+        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs mb-16">
+          Technical pipeline and data transformation journey
         </p>
       </div>
 
@@ -91,13 +91,21 @@
       </div>
 
       <!-- Footer CTA -->
-      <div class="mt-24 text-center pb-20">
+      <div class="mt-24 flex flex-col sm:flex-row items-center justify-center gap-6 pb-20 no-print">
+        <a
+          href="/docs/pipeline.pdf"
+          download
+          class="group inline-flex items-center gap-4 px-10 py-5 bg-white border border-slate-200 text-slate-600 rounded-full font-black uppercase tracking-[0.2em] text-[11px] shadow-xl hover:bg-slate-50 transition-all active:scale-95"
+        >
+          Download Architecture
+          <i class="fa-solid fa-download text-indigo-500 group-hover:bounce"></i>
+        </a>
         <NuxtLink
           to="/analysis"
           class="inline-flex items-center gap-4 px-10 py-5 bg-indigo-600 text-white rounded-full font-black uppercase tracking-[0.2em] text-[11px] shadow-2xl shadow-indigo-600/30 hover:scale-105 transition-all active:scale-95"
         >
-          Proceed to Processing Lab
-          <i class="fa-solid fa-microchip"></i>
+          Start Analysis
+          <i class="fa-solid fa-bolt-lightning"></i>
         </NuxtLink>
       </div>
     </div>
@@ -107,52 +115,53 @@
 <script setup>
 const steps = [
   {
-    layer: "Ingestion Layer",
-    title: "Raw Signal Capture",
+    layer: "Data Ingestion",
+    title: "High-Fidelity Signal Capture",
     description:
-      "Data originates from 3-phase power system monitors capturing Voltage (Va, Vb, Vc) and Current (Ia, Ib, Ic) in p.u. (per unit) format across multiple disturbance scenarios.",
+      "Captures high-resolution 3-phase signals (Va, Vb, Vc, Ia, Ib, Ic) at a 10kHz sampling rate. Data is converted to Per-Unit (p.u.) values to ensure the model remains invariant to base voltage levels across different parts of the transmission network.",
     icon: "fa-solid fa-table",
-    code: "dataset.csv -> [t(s), Va, Vb, Vc, Ia, Ib, Ic, Label]",
+    code: "Sampling: 10,000 Hz\nChannels: 7 (Time + 6 Signals)\nFormat: Normalized Per-Unit (p.u.)",
   },
   {
-    layer: "Preprocessing Engine",
-    title: "Feature Scaling",
+    layer: "Temporal Windowing",
+    title: "Sliding Window Segmentation",
     description:
-      "Raw signals are normalized using a pre-trained StandardScaler. This ensures all 6 signal channels share a uniform mean and variance, preventing bias during the convolution phase.",
-    icon: "fa-solid fa-broom-wide",
-    code: "scaler = joblib.load('scaler.joblib')\nsignals_scaled = scaler.transform(raw_data)",
+      "The continuous signal stream is segmented into temporal windows of 200 samples (20ms), which corresponds to one full fundamental cycle of a 50Hz system. This captures the complete transient profile required for accurate fault characterization.",
+    icon: "fa-solid fa-chart-pie",
+    code: "Window Size: 200 Samples (20ms)\nStride: 50 Samples (Overlapping)\nDomain: Time-Series Vector",
   },
   {
-    layer: "Neural Structuring",
-    title: "Tensor Transformation",
+    layer: "Preprocessing",
+    title: "Z-Score Normalization",
     description:
-      "The 2D signal matrix is reshaped into a 3D Tensor compatible with 1D-CNN batch processing. This creates a temporal window of 200 time-steps across 6 parallel channels.",
-    icon: "fa-solid fa-window-restore",
-    code: "Shape: (1, 200, 6) # [Batch, Steps, Features]",
+      "Every feature kanal is normalized using a pre-calculated StandardScaler artifact. This process removes DC offsets and ensures each signal channel has zero mean and unit variance, preventing gradient explosion during training.",
+    icon: "fa-solid fa-broom",
+    code: "Method: StandardScaler\nFormula: z = (x - u) / s\nArtifact: scaler.joblib",
   },
   {
-    layer: "AI Core",
-    title: "1D-CNN Classification",
+    layer: "Deep Backbone",
+    title: "1D-CNN Feature Extractor",
     description:
-      "A deep 1D Convolutional Neural Network extracts temporal features. The final layer utilizes a Softmax activation to compute probabilities across 11 classes (Normal + 10 Fault types).",
+      "The shared feature extractor utilizes three consecutive convolutional blocks (64, 128, and 256 filters). Each block uses Batch Normalization and ReLU activation to learn spatial-temporal dependencies and phase-shift correlations.",
+    icon: "fa-solid fa-microchip",
+    code: "Architecture: 3x [Conv1D + BN + ReLU + MaxPool]\nKernels: 7, 5, 3\nGlobal Pooling: GlobalAveragePooling1D",
+  },
+  {
+    layer: "Multi-Task Heads",
+    title: "Simultaneous Inference Logic",
+    description:
+      "The model branches into three parallel task heads. Status (Sigmoid) detects the presence of a fault, Type (Softmax) classifies the phase involvement, and Location (Rescaled Sigmoid) predicts the physical distance in kilometers.",
     icon: "fa-solid fa-brain",
-    code: 'layers.Dense(11, activation="softmax")\nmodel.predict(input_tensor)',
+    code: "Status: Binary Crossentropy\nType: Categorical Crossentropy\nLocation: Mean Squared Error (MSE)",
   },
   {
-    layer: "Logic Engine",
-    title: "Distance Calculation",
+    layer: "Resolution",
+    title: "Engineering Unit Conversion",
     description:
-      "The backend parses the predicted label to calculate physical distance. Since the system is based on a 5km transmission line, the fault location is derived from the predicted percentage.",
-    icon: "fa-solid fa-calculator",
-    code: "location_km = (percentage / 100.0) * 5.0\n# e.g., 25% of 5km = 1.25km",
-  },
-  {
-    layer: "Presentation Layer",
-    title: "Neural Mapping",
-    description:
-      "The Nuxt frontend renders the prediction matrix, visualizing temporal disturbances through interactive charts and high-level diagnostic reports for system engineers.",
-    icon: "fa-solid fa-display",
-  },
+      "Final AI predictions are mapped back to engineering units. The distance is computed via a sigmoid-scaled factor (0-5 KM) and current/voltage signals are converted to kA/kV for dashboard visualization.",
+    icon: "fa-solid fa-tags",
+    code: "Distance: Pred * 5.0 (KM)\nVoltage Base: 200 kV\nCurrent Base: 1 kA",
+  }
 ];
 </script>
 

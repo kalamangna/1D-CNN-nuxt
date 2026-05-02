@@ -38,8 +38,16 @@
           :disabled="!hasData"
           class="w-full bg-slate-900 hover:bg-indigo-600 disabled:bg-slate-50 disabled:text-slate-300 text-white font-bold py-5 rounded-2xl transition-all shadow-xl shadow-slate-200 active:scale-[0.95] text-xs uppercase tracking-widest flex items-center justify-center gap-4"
         >
-          <i class="fa-solid fa-brain"></i>
-          Start Analysis
+          <i class="fa-solid fa-bolt-lightning"></i>
+          Analyze
+        </button>
+        <button 
+          v-if="!hasData"
+          @click="$emit('loadTest')" 
+          class="w-full bg-white border border-slate-200 hover:border-indigo-400 text-slate-500 hover:text-indigo-600 font-bold py-5 rounded-2xl transition-all shadow-sm active:scale-[0.95] text-xs uppercase tracking-widest flex items-center justify-center gap-4 group"
+        >
+          <i class="fa-solid fa-flask group-hover:animate-bounce"></i>
+          Test Data
         </button>
       </div>
     </div>
@@ -48,5 +56,5 @@
 
 <script setup>
 defineProps({ title: String, hasData: Boolean, fileName: String })
-defineEmits(['triggerFile', 'analyze'])
+defineEmits(['triggerFile', 'analyze', 'loadTest'])
 </script>

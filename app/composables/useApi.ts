@@ -1,16 +1,16 @@
 export const useApi = () => {
   const config = useRuntimeConfig()
   
-  // Base URL for the Flask API
-  const API_BASE_URL = 'http://localhost:5001'
+  // Base URL from .env via runtimeConfig
+  const API_BASE_URL = config.public.apiBaseUrl
 
   /**
    * Predicts fault based on 200x6 time-series data.
    */
   const predictFault = async (signals) => {
     try {
-      if (!Array.isArray(signals) || signals.length !== 200 || signals[0].length !== 6) {
-        throw new Error('Invalid input shape. Expected a 200x6 matrix.')
+      if (!Array.isArray(signals) || signals.length !== 200 || signals[0].length !== 7) {
+        throw new Error('Invalid input shape. Expected a 200x7 matrix.')
       }
 
       const response = await $fetch(`${API_BASE_URL}/predict`, {

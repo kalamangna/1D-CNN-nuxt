@@ -5,7 +5,7 @@
     <header class="absolute top-10 left-10 right-10 flex justify-between items-center no-print">
        <NuxtLink to="/" class="group flex items-center gap-3 px-5 py-2.5 bg-white border border-slate-200 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95">
           <i class="fa-solid fa-arrow-left text-[10px] text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
-          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900 transition-colors">Main Stage</span>
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900 transition-colors">Home</span>
        </NuxtLink>
        <BackendStatus />
     </header>
@@ -17,19 +17,20 @@
         <AnalyzeCard 
           v-if="!result && !loading"
           key="ingestion"
-          title="Neural Processing Lab"
+          title="Lab"
           :has-data="!!fileData"
           :file-name="fileName"
           @trigger-file="triggerFileInput"
           @analyze="handleAnalysis"
+          @load-test="loadSampleData"
         />
 
         <!-- Processing State -->
         <LoadingState 
           v-else-if="loading"
           key="loading"
-          message="Neural Processing"
-          submessage="Computing 1D-CNN classification matrix..."
+          message="Processing"
+          submessage="Computing results..."
         />
 
         <!-- Result State -->
@@ -79,6 +80,7 @@ const handleFileUpload = (e) => {
         const rows = res.data
         if (rows.length < 200) throw new Error('Short window.')
         const keys = [
+          rows[0] && Object.keys(rows[0]).find(k => k.toLowerCase().includes('t (s)')),
           rows[0] && Object.keys(rows[0]).find(k => k.includes('V(a)')),
           rows[0] && Object.keys(rows[0]).find(k => k.includes('V(b)')),
           rows[0] && Object.keys(rows[0]).find(k => k.includes('V(c)')),
@@ -93,13 +95,34 @@ const handleFileUpload = (e) => {
   })
 }
 
+const loadSampleData = () => {
+  fileName.value = 'synthetic_test_sample.csv'
+  const samples = []
+  for (let i = 0; i < 200; i++) {
+    const t = i * 0.0001
+    // Generate simple sine waves for Va, Vb, Vc (with 120 deg phase shifts)
+    const va = Math.sin(2 * Math.PI * 50 * t) 
+    const vb = Math.sin(2 * Math.PI * 50 * t - (2*Math.PI/3))
+    const vc = Math.sin(2 * Math.PI * 50 * t - (4*Math.PI/3))
+    // Currents (Ia, Ib, Ic)
+    const ia = 0.5 * Math.sin(2 * Math.PI * 50 * t)
+    const ib = 0.5 * Math.sin(2 * Math.PI * 50 * t - (2*Math.PI/3))
+    const ic = 0.5 * Math.sin(2 * Math.PI * 50 * t - (4*Math.PI/3))
+    
+    // Add minor random noise
+    const noise = () => (Math.random() - 0.5) * 0.05
+    samples.push([t, va + noise(), vb + noise(), vc + noise(), ia + noise(), ib + noise(), ic + noise()])
+  }
+  fileData.value = samples
+}
+
 const handleAnalysis = async () => {
   if (!fileData.value) return
   loading.value = true; error.value = null
   setTimeout(async () => {
     try {
       result.value = await predictFault(fileData.value)
-    } catch (e) { error.value = 'API Offline' }
+    } catch (e) { error.value = 'System Error or Offline' }
     finally { loading.value = false }
   }, 1500)
 }

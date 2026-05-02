@@ -1,18 +1,20 @@
 # Frontend Mandates
 
 ## Context Precedence
-- This is the presentation layer for the 1D-CNN Power System Fault Detector.
-- Design style: **Modern, Industrial-Futuristic** (high contrast, bold typography, status-driven colors).
-- Primary interaction: CSV file upload -> Backend inference -> Result visualization.
+- Presentation layer for the 1D-CNN Power System Fault Detector.
+- Design: **Modern Industrial** (Dark/Light contrast, clean grids).
+- Navigation: Single-stage home with **Lab**, **Pipeline**, **Documentation**, and **Metrics** access.
 
 ## Engineering Standards
-- Use **Vanilla CSS** where custom styling is needed beyond Tailwind utilities.
-- Labels for fault data must be: **"Fault Position"** (%) and **"Physical Distance"** (km).
-- The waveform chart MUST display all 6 channels:
-    - **Voltages (Va, Vb, Vc):** Solid lines.
-    - **Currents (Ia, Ib, Ic):** Dashed lines.
-- Ensure all numbers are formatted consistently (e.g., confidence as %, distance as 2-decimal km).
+- **Data Shape:** Exactly **200 rows** x **7 columns** (Time at index 0).
+- **Visualization:**
+    - Dual sets: **Set 01 (p.u.)** and **Set 02 (kV / kA)**.
+    - Colors: Phase A (Blue `#0055aa`), Phase B (Red `#ee0000`), Phase C (Green `#00aa00`).
+    - Voltage: Solid lines | Current: Solid lines (displayed in separate charts).
+- **Formatters:** Confidence as %, Location as KM, Time as ms.
 
 ## Operational Workflows
-- When adding new pages, follow the existing layout pattern in `layouts/default.vue`.
-- Any changes to `useApi.ts` must maintain compatibility with the Flask backend response schema.
+- **API:** Use `useApi` composable for all calls.
+- **Artifacts:** Serve PDF documentation from `/docs/pipeline.pdf` and `/docs/documentation.pdf`.
+- **Result Logic:** Always show **Location** regardless of verdict (Normal/Fault).
+- **Simplification:** Use clean UI labels (Verdict, Certainty, Type, Location).

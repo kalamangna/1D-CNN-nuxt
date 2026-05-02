@@ -5,7 +5,7 @@
     <header class="max-w-6xl mx-auto flex justify-between items-center mb-16 no-print">
        <NuxtLink to="/" class="group flex items-center gap-3 px-5 py-2.5 bg-white border border-slate-200 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95">
           <i class="fa-solid fa-arrow-left text-[10px] text-slate-400 group-hover:text-indigo-600"></i>
-          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900">Main Stage</span>
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900">Home</span>
        </NuxtLink>
        <BackendStatus />
     </header>
@@ -14,9 +14,9 @@
       
       <!-- Page Title -->
       <div class="text-center space-y-4">
-         <h1 class="text-5xl font-black tracking-tighter text-slate-900 uppercase">Model Performance</h1>
+         <h1 class="text-5xl font-black tracking-tighter text-slate-900 uppercase">Metrics</h1>
          <p class="text-slate-400 font-bold uppercase tracking-[0.3em] text-xs leading-relaxed">
-            Neural network evaluation metrics and error analysis
+            AI Model Performance
          </p>
       </div>
 
@@ -48,13 +48,13 @@
          <section class="bg-slate-900 rounded-[3rem] p-10 lg:p-12 text-white shadow-2xl relative overflow-hidden">
             <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px]"></div>
             
-            <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-10">Diagnostic Context</h3>
+            <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-10">Context</h3>
             
             <div class="space-y-10 relative z-10">
                <div class="space-y-3 border-l-2 border-emerald-500/30 pl-6">
-                  <h4 class="text-sm font-bold text-emerald-400 uppercase tracking-widest">High Recall Priority</h4>
+                  <h4 class="text-sm font-bold text-emerald-400 uppercase tracking-widest">Why Recall Matters</h4>
                   <p class="text-slate-400 text-sm leading-relaxed italic">
-                     "In power systems, failing to detect a real fault (False Negative) is critical. Our model prioritizes catching every fault to prevent catastrophic hardware failure."
+                     "Missing a real fault is critical. We prioritize catching every fault to prevent hardware failure."
                   </p>
                </div>
 
@@ -65,7 +65,7 @@
                      </div>
                      <div>
                         <h5 class="text-sm font-bold uppercase tracking-tight mb-1">False Alarms (FP)</h5>
-                        <p class="text-xs text-slate-500 leading-relaxed max-w-xs">Occurs when AI predicts a fault but system is Normal. Causes unnecessary downtime.</p>
+                        <p class="text-xs text-slate-500 leading-relaxed max-w-xs">AI predicts a fault, but the system is Normal. Causes unnecessary checks.</p>
                      </div>
                   </div>
 
@@ -74,8 +74,8 @@
                         <i class="fa-solid fa-radiation text-rose-500"></i>
                      </div>
                      <div>
-                        <h5 class="text-sm font-bold uppercase tracking-tight mb-1 text-rose-400 underline decoration-rose-500/30 underline-offset-4">Miss Detections (FN)</h5>
-                        <p class="text-xs text-slate-500 leading-relaxed max-w-xs">Occurs when a real fault is missed. Can lead to fires, equipment damage, or blackouts.</p>
+                        <h5 class="text-sm font-bold uppercase tracking-tight mb-1 text-rose-400 underline decoration-rose-500/30 underline-offset-4">Missed Faults (FN)</h5>
+                        <p class="text-xs text-slate-500 leading-relaxed max-w-xs">A real fault is missed. Can lead to severe damage.</p>
                      </div>
                   </div>
                </div>
