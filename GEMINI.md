@@ -11,7 +11,7 @@
     - Dual sets: **Set 01 (p.u.)** and **Set 02 (kV / kA)**.
     - Colors: Phase A (Blue `#0055aa`), Phase B (Red `#ee0000`), Phase C (Green `#00aa00`).
     - Voltage: Solid lines | Current: Solid lines (displayed in separate charts).
-- **Formatters:** Confidence as %, Location as KM, Time as ms.
+- **Formatters:** Certainty as %, Location as KM, Time as ms.
 
 ## Operational Workflows
 - **API:** Use `useApi` composable for all calls.

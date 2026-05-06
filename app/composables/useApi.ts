@@ -5,7 +5,7 @@ export const useApi = () => {
   const API_BASE_URL = config.public.apiBaseUrl
 
   /**
-   * Predicts fault based on 200x6 time-series data.
+   * Predicts fault based on 200x7 time-series data.
    */
   const predictFault = async (signals) => {
     try {

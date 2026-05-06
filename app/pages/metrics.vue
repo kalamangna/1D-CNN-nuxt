@@ -21,11 +21,11 @@
       </div>
 
       <!-- Stat Grid -->
-      <div v-if="metrics" class="grid grid-cols-1 md:grid-cols-4 gap-6">
-         <div v-for="(val, key) in metricCards" :key="key" class="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/40">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">{{ key }}</p>
-            <p class="text-4xl font-black text-slate-900 tracking-tighter">
-               {{ (val * 100).toFixed(1) }}<span class="text-xl text-slate-300 font-bold ml-1">%</span>
+      <div v-if="metrics" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
+         <div v-for="(obj, key) in metricCards" :key="key" class="bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 shadow-xl shadow-slate-200/40">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 whitespace-nowrap">{{ key }}</p>
+            <p class="text-3xl lg:text-4xl font-black text-slate-900 tracking-tighter">
+               {{ obj.unit === '%' ? (obj.val * 100).toFixed(1) : obj.val.toFixed(2) }}<span class="text-lg lg:text-xl text-slate-300 font-bold ml-1">{{ obj.unit }}</span>
             </p>
          </div>
       </div>
@@ -102,10 +102,11 @@ onMounted(async () => {
 const metricCards = computed(() => {
   if (!metrics.value) return {}
   return {
-    "Accuracy": metrics.value.accuracy,
-    "Precision": metrics.value.precision,
-    "Recall": metrics.value.recall,
-    "F1-Score": metrics.value.f1_score
+    "Detection Acc.": { val: metrics.value.accuracy, unit: '%' },
+    "Class. Acc.": { val: metrics.value.classification_accuracy, unit: '%' },
+    "Precision": { val: metrics.value.precision, unit: '%' },
+    "Recall": { val: metrics.value.recall, unit: '%' },
+    "Dist. Error": { val: metrics.value.location_rmse, unit: 'KM' }
   }
 })
 </script>

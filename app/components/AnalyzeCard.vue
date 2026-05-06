@@ -27,8 +27,8 @@
             <i v-if="!hasData" class="fa-solid fa-cloud-arrow-up text-3xl text-slate-300 group-hover:text-indigo-500 transition-colors"></i>
             <i v-else class="fa-solid fa-check text-3xl text-emerald-500"></i>
           </div>
-          <h3 class="text-xl font-bold text-slate-800 tracking-tight leading-tight">{{ fileName || 'Input Waveform' }}</h3>
-          <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 opacity-60">200x6 CSV Samples</p>
+          <h3 class="text-xl font-bold text-slate-800 tracking-tight leading-tight">{{ fileName || 'CSV Input' }}</h3>
+          <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 opacity-60">200x7 Samples Matrix</p>
         </div>
       </div>
 

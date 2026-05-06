@@ -89,29 +89,52 @@ const handleFileUpload = (e) => {
           rows[0] && Object.keys(rows[0]).find(k => k.includes('I(c)'))
         ]
         if (keys.some(k => !k)) throw new Error('Data Schema mismatch.')
-        fileData.value = rows.slice(0, 200).map(r => keys.map(k => parseFloat(r[k]) || 0))
+        // Store all rows for visualization, handleAnalysis will handle windowing
+        fileData.value = rows.map(r => keys.map(k => parseFloat(r[k]) || 0))
       } catch (err) { error.value = err.message }
     }
   })
 }
 
 const loadSampleData = () => {
-  fileName.value = 'synthetic_test_sample.csv'
+  const isFaultScenario = Math.random() > 0.5
+  fileName.value = isFaultScenario ? 'test_fault_400.csv' : 'test_normal_400.csv'
+  
   const samples = []
-  for (let i = 0; i < 200; i++) {
-    const t = i * 0.0001
-    // Generate simple sine waves for Va, Vb, Vc (with 120 deg phase shifts)
-    const va = Math.sin(2 * Math.PI * 50 * t) 
-    const vb = Math.sin(2 * Math.PI * 50 * t - (2*Math.PI/3))
-    const vc = Math.sin(2 * Math.PI * 50 * t - (4*Math.PI/3))
-    // Currents (Ia, Ib, Ic)
-    const ia = 0.5 * Math.sin(2 * Math.PI * 50 * t)
-    const ib = 0.5 * Math.sin(2 * Math.PI * 50 * t - (2*Math.PI/3))
-    const ic = 0.5 * Math.sin(2 * Math.PI * 50 * t - (4*Math.PI/3))
+  // dt MUST be 0.0001 (10kHz) based on training data
+  const dt = 0.0001 
+  const freq = 50 // Standard grid frequency
+  const totalRows = 400
+  const faultStart = 200 
+  
+  for (let i = 0; i < totalRows; i++) {
+    const t = i * dt
+    const isFault = isFaultScenario && i >= faultStart
     
-    // Add minor random noise
-    const noise = () => (Math.random() - 0.5) * 0.05
-    samples.push([t, va + noise(), vb + noise(), vc + noise(), ia + noise(), ib + noise(), ic + noise()])
+    // Normal peaks from processed dataset observations
+    const vPeak = 1.0
+    const iPeak = 0.164
+
+    let vA = vPeak * Math.sin(2 * Math.PI * freq * t)
+    let vB = vPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3))
+    let vC = vPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+
+    let iA = iPeak * Math.sin(2 * Math.PI * freq * t)
+    let iB = iPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3))
+    let iC = iPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+
+    if (isFault) {
+      // Simulate an A-G fault (Phase A drops, Current A spikes)
+      vA = 0.2 * vA // Voltage sag
+      iA = 10.0 * iPeak * Math.sin(2 * Math.PI * freq * t - 0.5) // Current spike
+    }
+
+    const noise = () => (Math.random() - 0.5) * 0.005
+    samples.push([
+      t, 
+      vA + noise(), vB + noise(), vC + noise(),
+      iA + noise(), iB + noise(), iC + noise() 
+    ])
   }
   fileData.value = samples
 }
@@ -119,9 +142,31 @@ const loadSampleData = () => {
 const handleAnalysis = async () => {
   if (!fileData.value) return
   loading.value = true; error.value = null
+  
+  // Logic to find the best 200-sample window for the API
+  // Align with backend thresholds: vAbsMin < 0.8 or iAbsMax > 1.2
+  let windowStart = 0
+  const faultIdx = fileData.value.findIndex(r => {
+    const vAbsMin = Math.min(Math.abs(r[1]), Math.abs(r[2]), Math.abs(r[3]))
+    const iAbsMax = Math.max(Math.abs(r[4]), Math.abs(r[5]), Math.abs(r[6]))
+    return vAbsMin < 0.8 || iAbsMax > 1.2
+  })
+  
+  if (faultIdx !== -1) {
+    // Start the window shortly before the fault to capture the transient
+    windowStart = Math.max(0, faultIdx - 50)
+  }
+  
+  // Ensure we don't exceed array bounds
+  if (windowStart + 200 > fileData.value.length) {
+    windowStart = Math.max(0, fileData.value.length - 200)
+  }
+
+  const analysisWindow = fileData.value.slice(windowStart, windowStart + 200)
+
   setTimeout(async () => {
     try {
-      result.value = await predictFault(fileData.value)
+      result.value = await predictFault(analysisWindow)
     } catch (e) { error.value = 'System Error or Offline' }
     finally { loading.value = false }
   }, 1500)

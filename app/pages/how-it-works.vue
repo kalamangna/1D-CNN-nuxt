@@ -150,9 +150,9 @@ const steps = [
     layer: "Multi-Task Heads",
     title: "Simultaneous Inference Logic",
     description:
-      "The model branches into three parallel task heads. Status (Sigmoid) detects the presence of a fault, Type (Softmax) classifies the phase involvement, and Location (Rescaled Sigmoid) predicts the physical distance in kilometers.",
+      "The model branches into three parallel task heads. Detection (Sigmoid) identifies the presence of a fault, Type (Softmax) classifies the phase involvement, and Location (Rescaled Sigmoid) predicts the physical distance in kilometers.",
     icon: "fa-solid fa-brain",
-    code: "Status: Binary Crossentropy\nType: Categorical Crossentropy\nLocation: Mean Squared Error (MSE)",
+    code: "Detection: Binary Crossentropy\nType: Categorical Crossentropy\nLocation: Mean Squared Error (MSE)",
   },
   {
     layer: "Resolution",
