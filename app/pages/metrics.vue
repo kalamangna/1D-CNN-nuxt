@@ -113,7 +113,12 @@
                   <i class="fa-solid fa-toggle-on text-slate-300"></i>
                </div>
                <div class="p-8 space-y-4">
-                  <img :src="`${API_BASE_URL}/artifacts/binary_confusion_matrix.png`" alt="Binary Confusion Matrix" class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm">
+                  <img 
+                    :src="`${API_BASE_URL}/artifacts/binary_confusion_matrix.png`" 
+                    alt="Binary Confusion Matrix" 
+                    class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm cursor-zoom-in hover:scale-[1.02] transition-transform duration-500"
+                    @click="openImage(`${API_BASE_URL}/artifacts/binary_confusion_matrix.png`)"
+                  >
                   <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Visualization of the model's overall performance in distinguishing between Normal and Fault conditions.</p>
                </div>
             </section>
@@ -125,7 +130,12 @@
                   <i class="fa-solid fa-braille text-slate-300"></i>
                </div>
                <div class="p-8 space-y-4">
-                  <img :src="`${API_BASE_URL}/artifacts/confusion_matrix.png`" alt="Multi-Class Confusion Matrix" class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm">
+                  <img 
+                    :src="`${API_BASE_URL}/artifacts/confusion_matrix.png`" 
+                    alt="Multi-Class Confusion Matrix" 
+                    class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm cursor-zoom-in hover:scale-[1.02] transition-transform duration-500"
+                    @click="openImage(`${API_BASE_URL}/artifacts/confusion_matrix.png`)"
+                  >
                   <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Detailed prediction accuracy for each specific fault type (e.g., A-G, B-C, 3PH).</p>
                </div>
             </section>
@@ -140,7 +150,12 @@
                   <i class="fa-solid fa-chart-line text-slate-300"></i>
                </div>
                <div class="p-8 space-y-4">
-                  <img :src="`${API_BASE_URL}/artifacts/training_curves.png`" alt="Training Curves" class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm">
+                  <img 
+                    :src="`${API_BASE_URL}/artifacts/training_curves.png`" 
+                    alt="Training Curves" 
+                    class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm cursor-zoom-in hover:scale-[1.02] transition-transform duration-500"
+                    @click="openImage(`${API_BASE_URL}/artifacts/training_curves.png`)"
+                  >
                   <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Comparison graphs of Loss and Accuracy between Training and Validation data to monitor model stability and convergence.</p>
                </div>
             </section>
@@ -186,12 +201,40 @@
 
       </div>
     </div>
+
+    <!-- Full Screen Image Modal -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div v-if="selectedImage" class="fixed inset-0 z-[1000] bg-slate-900/95 backdrop-blur-2xl p-6 lg:p-20 flex items-center justify-center no-print cursor-zoom-out" @click="closeImage">
+           <img 
+            :src="selectedImage" 
+            class="max-w-full max-h-full rounded-[2rem] shadow-2xl animate-in zoom-in-95 duration-300" 
+            @click.stop
+           >
+           <button @click="closeImage" class="absolute top-10 right-10 w-14 h-14 rounded-full bg-white/10 text-white hover:bg-rose-500 transition-all flex items-center justify-center group">
+              <i class="fa-solid fa-xmark text-xl group-hover:rotate-90 transition-transform"></i>
+           </button>
+        </div>
+      </Transition>
+    </Teleport>
+
   </div>
 </template>
 
 <script setup>
 const { getMetrics, API_BASE_URL } = useApi()
 const metrics = ref(null)
+const selectedImage = ref(null)
+
+const openImage = (url) => {
+  selectedImage.value = url
+  document.body.style.overflow = 'hidden'
+}
+
+const closeImage = () => {
+  selectedImage.value = null
+  document.body.style.overflow = ''
+}
 
 onMounted(async () => {
   try {
@@ -213,3 +256,14 @@ const metricCards = computed(() => {
   }
 })
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
