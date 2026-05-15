@@ -98,42 +98,71 @@ const handleFileUpload = (e) => {
 
 const loadSampleData = () => {
   const isFaultScenario = Math.random() > 0.5
-  fileName.value = isFaultScenario ? 'test_fault_400.csv' : 'test_normal_400.csv'
   
   const samples = []
-  // dt MUST be 0.0001 (10kHz) based on training data
   const dt = 0.0001 
-  const freq = 50 // Standard grid frequency
+  const freq = 50 
   const totalRows = 400
   const faultStart = 200 
   
+  // Randomize Fault Type and Location if applicable
+  const faultTypes = ['A-G', 'B-G', 'C-G', 'A-B', 'B-C', 'C-A', 'AB-G', 'BC-G', 'CA-G', 'A-B-C']
+  const selectedType = isFaultScenario ? faultTypes[Math.floor(Math.random() * faultTypes.length)] : 'Normal'
+  const randomLocationPct = Math.floor(Math.random() * 90) + 5 // 5% to 95%
+  
+  fileName.value = isFaultScenario 
+    ? `test_${selectedType.toLowerCase()}_${randomLocationPct}pct_400.csv` 
+    : 'test_normal_400.csv'
+
   for (let i = 0; i < totalRows; i++) {
     const t = i * dt
     const isFault = isFaultScenario && i >= faultStart
     
-    // Normal peaks from processed dataset observations
     const vPeak = 1.0
     const iPeak = 0.164
 
-    let vA = vPeak * Math.sin(2 * Math.PI * freq * t)
-    let vB = vPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3))
-    let vC = vPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+    // Base Sinusoidal Signals
+    let v = [
+      vPeak * Math.sin(2 * Math.PI * freq * t),
+      vPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3)),
+      vPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+    ]
 
-    let iA = iPeak * Math.sin(2 * Math.PI * freq * t)
-    let iB = iPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3))
-    let iC = iPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+    let curr = [
+      iPeak * Math.sin(2 * Math.PI * freq * t),
+      iPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3)),
+      iPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+    ]
 
     if (isFault) {
-      // Simulate an A-G fault (Phase A drops, Current A spikes)
-      vA = 0.2 * vA // Voltage sag
-      iA = 10.0 * iPeak * Math.sin(2 * Math.PI * freq * t - 0.5) // Current spike
+      // Impact of location: Closer (lower %) usually means higher current spike
+      const severityFactor = 1.0 - (randomLocationPct / 100)
+      
+      // DEEPER SAGS & HIGHER SPIKES for better detection
+      // Voltage sag: 0.05 (near) to 0.4 (far)
+      const vSag = 0.05 + (randomLocationPct / 250) 
+      // Current spike: 8.0x (far) to 20.0x (near)
+      const iBoost = 8.0 + (severityFactor * 12.0) 
+
+      const applyFault = (idx) => {
+        v[idx] = v[idx] * vSag
+        curr[idx] = curr[idx] * iBoost
+      }
+
+      if (selectedType === 'A-G') applyFault(0)
+      else if (selectedType === 'B-G') applyFault(1)
+      else if (selectedType === 'C-G') applyFault(2)
+      else if (selectedType === 'A-B' || selectedType === 'AB-G') { applyFault(0); applyFault(1); }
+      else if (selectedType === 'B-C' || selectedType === 'BC-G') { applyFault(1); applyFault(2); }
+      else if (selectedType === 'C-A' || selectedType === 'CA-G') { applyFault(2); applyFault(0); }
+      else if (selectedType === 'A-B-C') { applyFault(0); applyFault(1); applyFault(2); }
     }
 
     const noise = () => (Math.random() - 0.5) * 0.005
     samples.push([
       t, 
-      vA + noise(), vB + noise(), vC + noise(),
-      iA + noise(), iB + noise(), iC + noise() 
+      v[0] + noise(), v[1] + noise(), v[2] + noise(),
+      curr[0] + noise(), curr[1] + noise(), curr[2] + noise() 
     ])
   }
   fileData.value = samples
@@ -149,12 +178,12 @@ const handleAnalysis = async () => {
   const faultIdx = fileData.value.findIndex(r => {
     const vAbsMin = Math.min(Math.abs(r[1]), Math.abs(r[2]), Math.abs(r[3]))
     const iAbsMax = Math.max(Math.abs(r[4]), Math.abs(r[5]), Math.abs(r[6]))
-    return vAbsMin < 0.8 || iAbsMax > 1.2
+    return vAbsMin < 0.7 || iAbsMax > 1.3 // Slightly stricter for windowing
   })
   
   if (faultIdx !== -1) {
-    // Start the window shortly before the fault to capture the transient
-    windowStart = Math.max(0, faultIdx - 50)
+    // Capture 30% pre-fault and 70% post-fault for rich context
+    windowStart = Math.max(0, faultIdx - 60)
   }
   
   // Ensure we don't exceed array bounds

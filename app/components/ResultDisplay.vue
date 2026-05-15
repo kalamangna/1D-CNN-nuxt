@@ -8,126 +8,144 @@
         class="absolute -top-24 -right-24 w-96 h-96 blur-[120px] pointer-events-none rounded-full"
       ></div>
 
-      <div class="relative z-10 space-y-16">
+      <div class="relative z-10 space-y-12">
         
-        <!-- SECTION 01: DIAGNOSTIC SUMMARY -->
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 border-b border-slate-100 pb-12">
-          <div class="space-y-4">
+        <!-- SECTION 01: PRIMARY DIAGNOSIS -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-12 border-b border-slate-100 pb-12">
+          <div class="space-y-6 flex-1">
             <div class="flex items-center gap-3">
               <div :class="result.detection === 'Normal' ? 'bg-emerald-500' : 'bg-rose-500'" class="w-2.5 h-3 rounded-full animate-pulse shadow-lg"></div>
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Verdict</span>
+              <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">System Status</span>
             </div>
-            <h2 
-              :class="result.detection === 'Normal' ? 'text-emerald-600' : 'text-rose-600'"
-              class="text-5xl md:text-6xl lg:text-7xl font-[1000] tracking-tighter leading-none uppercase italic break-all"
-            >
-              {{ result.detection === 'Normal' ? 'NORMAL' : 'FAULT' }}
-            </h2>
+            <div class="space-y-2">
+              <h2 
+                :class="result.detection === 'Normal' ? 'text-emerald-600' : 'text-rose-600'"
+                class="text-4xl md:text-5xl lg:text-6xl font-[1000] tracking-tighter leading-none uppercase italic break-all"
+              >
+                {{ result.detection === 'Normal' ? 'NORMAL' : 'FAULT' }}
+              </h2>
+              <p class="text-sm font-bold text-slate-400 max-w-lg leading-relaxed">
+                {{ result.detection === 'Normal' 
+                    ? 'The AI model has determined that the system is operating within standard parameters. No anomalies detected in the provided signal window.' 
+                    : `A fault condition has been identified as ${result.classification}. The anomaly originated approximately ${result.fault_location_km} KM from the monitoring station.` 
+                }}
+              </p>
+            </div>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-4">
-             <div class="bg-slate-50 border border-slate-100 rounded-3xl p-5 px-8">
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Certainty</span>
-                <p class="text-3xl font-black text-slate-900 tracking-tighter mono">
-                   {{ (result.confidence * 100).toFixed(1) }}<span class="text-xl text-slate-300 ml-1">%</span>
+          <div class="flex shrink-0">
+             <div class="bg-slate-900 rounded-[2.5rem] p-8 px-10 text-white shadow-2xl relative overflow-hidden group">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all duration-700"></div>
+                <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-2">Model Certainty</span>
+                <p class="text-5xl font-black tracking-tighter mono relative z-10">
+                   {{ (result.confidence * 100).toFixed(1) }}<span class="text-2xl text-slate-600 ml-1">%</span>
                 </p>
              </div>
           </div>
         </div>
 
-        <!-- SECTION 02: KEY PARAMETERS -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- SECTION 02: ANALYTICAL PARAMETERS -->
+        <div 
+          :class="{
+            'lg:grid-cols-3': result.detection !== 'Normal',
+            'lg:grid-cols-1 max-w-sm': result.detection === 'Normal'
+          }"
+          class="grid grid-cols-1 sm:grid-cols-2 gap-6"
+        >
            <!-- Classification Card -->
-           <div class="p-8 rounded-[2.5rem] bg-slate-50/50 border border-slate-100 flex items-center justify-between transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-100/50 group">
+           <div class="p-8 rounded-[2.5rem] bg-white border border-slate-200 shadow-sm flex items-center justify-between transition-all hover:shadow-xl hover:-translate-y-1 group">
               <div class="space-y-1">
-                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Type</span>
-                 <p class="text-2xl font-black text-slate-800 tracking-tight uppercase">{{ result.classification }}</p>
+                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Classification</span>
+                 <p class="text-xl font-black text-slate-900 tracking-tight uppercase italic">{{ result.classification }}</p>
               </div>
-              <i class="fa-solid fa-fingerprint text-3xl text-slate-200 group-hover:text-indigo-500 transition-colors"></i>
+              <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all">
+                 <i class="fa-solid fa-fingerprint text-xl opacity-20 group-hover:opacity-100"></i>
+              </div>
            </div>
 
            <!-- Location Card -->
-           <div class="p-8 rounded-[2.5rem] bg-slate-50/50 border border-slate-100 flex items-center justify-between transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-100/50 group">
+           <div v-if="result.detection !== 'Normal'" class="p-8 rounded-[2.5rem] bg-white border border-slate-200 shadow-sm flex items-center justify-between transition-all hover:shadow-xl hover:-translate-y-1 group">
               <div class="space-y-1">
-                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Location</span>
-                 <p class="text-2xl font-black text-slate-800 tracking-tight uppercase">
+                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Fault Distance</span>
+                 <p class="text-xl font-black text-slate-900 tracking-tight uppercase">
                     {{ result.fault_location_km !== 'N/A' ? result.fault_location_km : '--' }} 
                     <span class="text-lg text-slate-300 ml-1">KM</span>
                  </p>
               </div>
-              <i class="fa-solid fa-location-dot text-3xl text-slate-200 group-hover:text-rose-500 transition-colors"></i>
+              <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-rose-50 group-hover:text-rose-600 transition-all">
+                 <i class="fa-solid fa-location-dot text-xl opacity-20 group-hover:opacity-100"></i>
+              </div>
            </div>
 
            <!-- Inception Time Card -->
-           <div class="p-8 rounded-[2.5rem] bg-slate-50/50 border border-slate-100 flex items-center justify-between transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-100/50 group">
+           <div v-if="result.detection !== 'Normal'" class="p-8 rounded-[2.5rem] bg-white border border-slate-200 shadow-sm flex items-center justify-between transition-all hover:shadow-xl hover:-translate-y-1 group sm:col-span-2 lg:col-span-1">
               <div class="space-y-1">
                  <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Inception Time</span>
-                 <p class="text-2xl font-black text-slate-800 tracking-tight uppercase">
+                 <p class="text-xl font-black text-slate-900 tracking-tight uppercase">
                     {{ result.fault_time_s !== 'N/A' ? (result.fault_time_s * 1000).toFixed(1) : '--' }}
                     <span class="text-lg text-slate-300 ml-1">MS</span>
                  </p>
               </div>
-              <i class="fa-solid fa-stopwatch text-3xl text-slate-200 group-hover:text-amber-500 transition-colors"></i>
+              <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-amber-50 group-hover:text-amber-600 transition-all">
+                 <i class="fa-solid fa-stopwatch text-xl opacity-20 group-hover:opacity-100"></i>
+              </div>
            </div>
         </div>
 
-        <!-- SECTION 03: VISUALIZATION STAGE (Unified Background) -->
-        <div class="p-8 lg:p-12 bg-slate-50/50 rounded-[3rem] border border-slate-100 space-y-24">
-           
-           <!-- PER UNIT SET -->
-           <div class="space-y-10">
+        <!-- SECTION 03: VISUALIZATION HUB -->
+        <div class="space-y-10">
+           <div class="flex items-center justify-between">
               <div class="flex items-center gap-4">
-                 <span class="w-1.5 h-6 bg-indigo-500 rounded-full"></span>
-                 <h3 class="text-lg font-black text-slate-900 tracking-tight italic uppercase">Normalized Signal <span class="text-slate-300 font-normal ml-2 text-sm">(p.u.)</span></h3>
+                 <span class="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                 <h3 class="text-xs font-black text-slate-900 tracking-[0.2em] uppercase">Signal Analysis</h3>
               </div>
-
-              <div class="space-y-12">
-                 <div class="space-y-6">
-                    <div class="flex justify-between items-center pl-1">
-                       <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] block">Voltage Profile</span>
-                       <button @click="openModal('vPu')" class="text-[9px] font-black text-indigo-400 hover:text-indigo-600 uppercase tracking-widest transition-colors flex items-center gap-2">
-                          <i class="fa-solid fa-expand"></i> Expand
-                       </button>
-                    </div>
-                    <div class="h-44 w-full"><canvas ref="vPuCanvas"></canvas></div>
+              <div class="flex gap-2">
+                 <div class="flex items-center gap-2 px-3 py-1 bg-blue-50 text-[9px] font-bold text-blue-600 rounded-full border border-blue-100">
+                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span> PH-A
                  </div>
-                 <div class="space-y-6">
-                    <div class="flex justify-between items-center pl-1">
-                       <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] block">Current Profile</span>
-                       <button @click="openModal('iPu')" class="text-[9px] font-black text-indigo-400 hover:text-indigo-600 uppercase tracking-widest transition-colors flex items-center gap-2">
-                          <i class="fa-solid fa-expand"></i> Expand
-                       </button>
-                    </div>
-                    <div class="h-44 w-full"><canvas ref="iPuCanvas"></canvas></div>
+                 <div class="flex items-center gap-2 px-3 py-1 bg-red-50 text-[9px] font-bold text-red-600 rounded-full border border-red-100">
+                    <span class="w-1.5 h-1.5 bg-red-600 rounded-full"></span> PH-B
+                 </div>
+                 <div class="flex items-center gap-2 px-3 py-1 bg-green-50 text-[9px] font-bold text-green-600 rounded-full border border-green-100">
+                    <span class="w-1.5 h-1.5 bg-green-600 rounded-full"></span> PH-C
                  </div>
               </div>
            </div>
 
-           <!-- PHYSICAL UNIT SET -->
-           <div class="space-y-10 border-t border-slate-100 pt-16">
-              <div class="flex items-center gap-4">
-                 <span class="w-1.5 h-6 bg-rose-500 rounded-full"></span>
-                 <h3 class="text-lg font-black text-slate-900 tracking-tight italic uppercase">Physical Signal <span class="text-slate-300 font-normal ml-2 text-sm">(kV / kA)</span></h3>
+           <div class="grid grid-cols-1 gap-12">
+              <!-- PER UNIT SET -->
+              <div class="p-8 lg:p-12 bg-slate-50/50 rounded-[3rem] border border-slate-100 space-y-10">
+                 <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                       <span class="w-1.5 h-6 bg-indigo-500 rounded-full"></span>
+                       <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest italic">Normalized Signal <span class="text-slate-400 font-normal ml-2 text-xs">(p.u.)</span></h4>
+                    </div>
+                    <div class="flex gap-4">
+                       <button @click="openModal('vPu')" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-indigo-600 transition-all flex items-center justify-center shadow-sm"><i class="fa-solid fa-bolt-lightning text-xs"></i></button>
+                       <button @click="openModal('iPu')" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-indigo-600 transition-all flex items-center justify-center shadow-sm"><i class="fa-solid fa-wave-square text-xs"></i></button>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-1 gap-10">
+                    <div class="h-64 w-full"><canvas ref="vPuCanvas"></canvas></div>
+                    <div class="h-64 w-full border-t border-slate-200/50 pt-10"><canvas ref="iPuCanvas"></canvas></div>
+                 </div>
               </div>
 
-              <div class="space-y-12">
-                 <div class="space-y-6">
-                    <div class="flex justify-between items-center pl-1">
-                       <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] block">Converted Voltage</span>
-                       <button @click="openModal('vPhys')" class="text-[9px] font-black text-rose-400 hover:text-rose-600 uppercase tracking-widest transition-colors flex items-center gap-2">
-                          <i class="fa-solid fa-expand"></i> Expand
-                       </button>
+              <!-- PHYSICAL UNIT SET -->
+              <div class="p-8 lg:p-12 bg-slate-50/50 rounded-[3rem] border border-slate-100 space-y-10">
+                 <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                       <span class="w-1.5 h-6 bg-rose-500 rounded-full"></span>
+                       <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest italic">Physical Signal <span class="text-slate-400 font-normal ml-2 text-xs">(kV / kA)</span></h4>
                     </div>
-                    <div class="h-44 w-full"><canvas ref="vPhysCanvas"></canvas></div>
+                    <div class="flex gap-4">
+                       <button @click="openModal('vPhys')" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-rose-600 transition-all flex items-center justify-center shadow-sm"><i class="fa-solid fa-bolt-lightning text-xs"></i></button>
+                       <button @click="openModal('iPhys')" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-rose-600 transition-all flex items-center justify-center shadow-sm"><i class="fa-solid fa-wave-square text-xs"></i></button>
+                    </div>
                  </div>
-                 <div class="space-y-6">
-                    <div class="flex justify-between items-center pl-1">
-                       <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] block">Converted Current</span>
-                       <button @click="openModal('iPhys')" class="text-[9px] font-black text-rose-400 hover:text-rose-600 uppercase tracking-widest transition-colors flex items-center gap-2">
-                          <i class="fa-solid fa-expand"></i> Expand
-                       </button>
-                    </div>
-                    <div class="h-44 w-full"><canvas ref="iPhysCanvas"></canvas></div>
+                 <div class="grid grid-cols-1 gap-10">
+                    <div class="h-64 w-full"><canvas ref="vPhysCanvas"></canvas></div>
+                    <div class="h-64 w-full border-t border-slate-200/50 pt-10"><canvas ref="iPhysCanvas"></canvas></div>
                  </div>
               </div>
            </div>
@@ -205,6 +223,9 @@
 </template>
 
 <script setup>
+import { Chart, registerables } from 'chart.js'
+Chart.register(...registerables)
+
 const props = defineProps({ 
   result: { type: Object, required: true },
   signals: { type: Array, required: true }
@@ -248,7 +269,6 @@ const closeModal = () => {
 }
 
 const initModalChart = (chartId) => {
-  if (typeof Chart === 'undefined') return
   if (modalChart) modalChart.destroy()
 
   const labels = props.signals.map(r => (r[0] * 1000).toFixed(1))
@@ -299,7 +319,6 @@ const initModalChart = (chartId) => {
 }
 
 const initCharts = () => {
-  if (typeof Chart === 'undefined') return
   charts.forEach(c => c.destroy())
   charts = []
 
@@ -326,6 +345,8 @@ const initCharts = () => {
   })
 
   const createSet = (vCanv, iCanv, unit, vB, iB) => {
+    if (!vCanv || !iCanv) return
+
     const vC = new Chart(vCanv.getContext('2d'), {
       type: 'line',
       data: {
@@ -371,8 +392,13 @@ const initCharts = () => {
 }
 
 onMounted(() => {
-  setTimeout(() => initCharts(), 100)
+  // Wait for the transition animation to complete (approx 600ms-800ms)
+  setTimeout(() => initCharts(), 800)
 })
+
+watch(() => props.signals, () => {
+  nextTick(() => initCharts())
+}, { deep: true })
 
 onUnmounted(() => {
   charts.forEach(c => c.destroy())
