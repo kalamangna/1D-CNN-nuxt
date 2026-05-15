@@ -27,7 +27,7 @@
               <p class="text-sm font-bold text-slate-400 max-w-lg leading-relaxed">
                 {{ result.detection === 'Normal' 
                     ? 'The AI model has determined that the system is operating within standard parameters. No anomalies detected in the provided signal window.' 
-                    : `A fault condition has been identified as ${result.classification}. The anomaly originated approximately ${result.fault_location_km} KM from the monitoring station.` 
+                    : `A fault condition has been identified as ${result.classification}. The anomaly originated at ${result.fault_location_km} KM from the monitoring station.` 
                 }}
               </p>
             </div>

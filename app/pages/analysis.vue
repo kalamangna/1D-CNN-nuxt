@@ -108,7 +108,9 @@ const loadSampleData = (testType) => {
   // Randomize Fault Type and Location if applicable
   const faultTypes = ['A-G', 'B-G', 'C-G', 'A-B', 'B-C', 'C-A', 'AB-G', 'BC-G', 'CA-G', 'A-B-C']
   const selectedType = isFaultScenario ? faultTypes[Math.floor(Math.random() * faultTypes.length)] : 'Normal'
-  const randomLocationPct = Math.floor(Math.random() * 90) + 5 // 5% to 95%
+  // Use exact percentages from training dataset: 5%, 25%, 50%, 75%, 98%
+  const trainingPcts = [5, 25, 50, 75, 98]
+  const randomLocationPct = trainingPcts[Math.floor(Math.random() * trainingPcts.length)]
   
   fileName.value = isFaultScenario 
     ? `test_${selectedType.toLowerCase()}_${randomLocationPct}pct_400.csv` 
