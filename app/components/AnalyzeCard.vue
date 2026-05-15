@@ -41,14 +41,23 @@
           <i class="fa-solid fa-bolt-lightning"></i>
           Analyze
         </button>
-        <button 
-          v-if="!hasData"
-          @click="$emit('loadTest')" 
-          class="w-full bg-white border border-slate-200 hover:border-indigo-400 text-slate-500 hover:text-indigo-600 font-bold py-5 rounded-2xl transition-all shadow-sm active:scale-[0.95] text-xs uppercase tracking-widest flex items-center justify-center gap-4 group"
-        >
-          <i class="fa-solid fa-flask group-hover:animate-bounce"></i>
-          Test Data
-        </button>
+        
+        <div v-if="!hasData" class="w-full flex gap-2">
+          <button 
+            @click="$emit('loadTest', 'normal')" 
+            class="flex-1 bg-white border border-slate-200 hover:border-emerald-400 text-slate-500 hover:text-emerald-600 font-bold py-5 rounded-2xl transition-all shadow-sm active:scale-[0.95] text-[10px] uppercase tracking-widest flex flex-col items-center justify-center gap-2 group"
+          >
+            <i class="fa-solid fa-shield-halved text-sm group-hover:scale-110 transition-transform"></i>
+            Normal Data
+          </button>
+          <button 
+            @click="$emit('loadTest', 'fault')" 
+            class="flex-1 bg-white border border-slate-200 hover:border-rose-400 text-slate-500 hover:text-rose-600 font-bold py-5 rounded-2xl transition-all shadow-sm active:scale-[0.95] text-[10px] uppercase tracking-widest flex flex-col items-center justify-center gap-2 group"
+          >
+            <i class="fa-solid fa-radiation text-sm group-hover:scale-110 transition-transform"></i>
+            Fault Data
+          </button>
+        </div>
       </div>
     </div>
   </div>

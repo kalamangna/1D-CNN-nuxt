@@ -96,8 +96,8 @@ const handleFileUpload = (e) => {
   })
 }
 
-const loadSampleData = () => {
-  const isFaultScenario = Math.random() > 0.5
+const loadSampleData = (testType) => {
+  const isFaultScenario = testType === 'fault'
   
   const samples = []
   const dt = 0.0001 
@@ -119,39 +119,43 @@ const loadSampleData = () => {
     const isFault = isFaultScenario && i >= faultStart
     
     const vPeak = 1.0
-    const iPeak = 0.164
+    const iPeak = 0.16 
+    const phaseShift = 2.84 // Corresponds to Va ~ -0.96 at t=0
 
     // Base Sinusoidal Signals
     let v = [
-      vPeak * Math.sin(2 * Math.PI * freq * t),
-      vPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3)),
-      vPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+      vPeak * Math.cos(2 * Math.PI * freq * t + phaseShift),
+      vPeak * Math.cos(2 * Math.PI * freq * t - (2 * Math.PI / 3) + phaseShift),
+      vPeak * Math.cos(2 * Math.PI * freq * t - (4 * Math.PI / 3) + phaseShift)
     ]
 
     let curr = [
-      iPeak * Math.sin(2 * Math.PI * freq * t),
-      iPeak * Math.sin(2 * Math.PI * freq * t - (2 * Math.PI / 3)),
-      iPeak * Math.sin(2 * Math.PI * freq * t - (4 * Math.PI / 3))
+      iPeak * Math.cos(2 * Math.PI * freq * t + phaseShift),
+      iPeak * Math.cos(2 * Math.PI * freq * t - (2 * Math.PI / 3) + phaseShift),
+      iPeak * Math.cos(2 * Math.PI * freq * t - (4 * Math.PI / 3) + phaseShift)
     ]
 
     if (isFault) {
-      // Impact of location: Closer (lower %) usually means higher current spike
+      // Impact of location: Closer (lower %) means higher current spike
       const severityFactor = 1.0 - (randomLocationPct / 100)
       
-      // DEEPER SAGS & HIGHER SPIKES for better detection
-      // Voltage sag: 0.05 (near) to 0.4 (far)
-      const vSag = 0.05 + (randomLocationPct / 250) 
-      // Current spike: 8.0x (far) to 20.0x (near)
-      const iBoost = 8.0 + (severityFactor * 12.0) 
+      // REALISTIC FAULT CHARACTERISTICS (Matching Training Data)
+      // Voltage sag: 0.1 (near) to 0.7 (far)
+      const vSag = 0.1 + (randomLocationPct / 200) 
+      // Current spike: 4.0x (far) to 15.0x (near) -> Peak ~0.64 to ~2.4 p.u.
+      const iBoost = 4.0 + (severityFactor * 11.0) 
 
       const applyFault = (idx) => {
         v[idx] = v[idx] * vSag
         curr[idx] = curr[idx] * iBoost
       }
+      
+      // Apply noise/distortion to fault
+      const faultNoise = () => (Math.random() - 0.5) * 0.05
 
-      if (selectedType === 'A-G') applyFault(0)
-      else if (selectedType === 'B-G') applyFault(1)
-      else if (selectedType === 'C-G') applyFault(2)
+      if (selectedType === 'A-G') { applyFault(0); v[0] += faultNoise(); }
+      else if (selectedType === 'B-G') { applyFault(1); v[1] += faultNoise(); }
+      else if (selectedType === 'C-G') { applyFault(2); v[2] += faultNoise(); }
       else if (selectedType === 'A-B' || selectedType === 'AB-G') { applyFault(0); applyFault(1); }
       else if (selectedType === 'B-C' || selectedType === 'BC-G') { applyFault(1); applyFault(2); }
       else if (selectedType === 'C-A' || selectedType === 'CA-G') { applyFault(2); applyFault(0); }
@@ -173,17 +177,17 @@ const handleAnalysis = async () => {
   loading.value = true; error.value = null
   
   // Logic to find the best 200-sample window for the API
-  // Align with backend thresholds: vAbsMin < 0.8 or iAbsMax > 1.2
   let windowStart = 0
   const faultIdx = fileData.value.findIndex(r => {
-    const vAbsMin = Math.min(Math.abs(r[1]), Math.abs(r[2]), Math.abs(r[3]))
+    const vAbsMax = Math.max(Math.abs(r[1]), Math.abs(r[2]), Math.abs(r[3]))
     const iAbsMax = Math.max(Math.abs(r[4]), Math.abs(r[5]), Math.abs(r[6]))
-    return vAbsMin < 0.7 || iAbsMax > 1.3 // Slightly stricter for windowing
+    // Aligned with backend: Voltage peak sag < 0.85 or Current spike > 0.3
+    return vAbsMax < 0.85 || iAbsMax > 0.3
   })
   
   if (faultIdx !== -1) {
-    // Capture 30% pre-fault and 70% post-fault for rich context
-    windowStart = Math.max(0, faultIdx - 60)
+    // 50 samples of pre-fault context (5ms) for better visualization
+    windowStart = Math.max(0, faultIdx - 50)
   }
   
   // Ensure we don't exceed array bounds

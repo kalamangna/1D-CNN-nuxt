@@ -20,15 +20,15 @@
              <ul class="space-y-6">
                 <li class="flex gap-4">
                    <span class="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center text-[10px] font-black text-indigo-600 shrink-0">1</span>
-                   <p class="text-sm text-slate-600 leading-relaxed font-medium">Prepare your input signal in <strong>CSV format</strong> with exactly 7 columns including Time.</p>
+                   <p class="text-sm text-slate-600 leading-relaxed font-medium">Prepare your input signal in <strong>CSV format</strong> with 7 specific columns: Time, Va, Vb, Vc, Ia, Ib, and Ic (p.u. format preferred).</p>
                 </li>
                 <li class="flex gap-4">
                    <span class="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center text-[10px] font-black text-indigo-600 shrink-0">2</span>
-                   <p class="text-sm text-slate-600 leading-relaxed font-medium">Go to <strong>Lab</strong> section and upload your file or use <strong>Test Data</strong> for simulation.</p>
+                   <p class="text-sm text-slate-600 leading-relaxed font-medium">Go to <strong>Lab</strong> section to upload your file. You can also use <strong>Normal Data</strong> or <strong>Fault Data</strong> buttons to generate calibrated synthetic signals for testing.</p>
                 </li>
                 <li class="flex gap-4">
                    <span class="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center text-[10px] font-black text-indigo-600 shrink-0">3</span>
-                   <p class="text-sm text-slate-600 leading-relaxed font-medium">Review the <strong>Verdict</strong> and <strong>Location</strong> predictions displayed on the dashboard.</p>
+                   <p class="text-sm text-slate-600 leading-relaxed font-medium">Analyze the results. The system will provide a <strong>Verdict</strong>, <strong>Classification Type</strong>, <strong>Precise Location (KM)</strong>, and <strong>Fault Inception Time (MS)</strong>.</p>
                 </li>
              </ul>
           </section>
