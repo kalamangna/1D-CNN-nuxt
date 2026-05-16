@@ -1,0 +1,130 @@
+'Log files:
+/Users/abedzul/Desktop/htdocs/1d-cnn/frontend/.npm-cache/_logs/2026-05-16T15_52_27_970Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: frontend@undefined
+Found: vite@7.3.2
+node_modules/vite
+  peer vite@">=6.0" from @nuxt/devtools@3.2.4
+  node_modules/@nuxt/devtools
+    @nuxt/devtools@"^3.2.3" from nuxt@4.4.2
+    node_modules/nuxt
+      peer nuxt@"^4.4.2" from @nuxt/nitro-server@4.4.2
+      node_modules/@nuxt/nitro-server
+        @nuxt/nitro-server@"4.4.2" from nuxt@4.4.2
+      peer nuxt@"4.4.2" from @nuxt/vite-builder@4.4.2
+      node_modules/@nuxt/vite-builder
+        @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+      nuxt@"^4.4.2" from the root project
+  peer vite@">=6.0" from @nuxt/devtools-kit@3.2.4
+  node_modules/@nuxt/devtools-kit
+    @nuxt/devtools-kit@"3.2.4" from @nuxt/devtools@3.2.4
+    node_modules/@nuxt/devtools
+      @nuxt/devtools@"^3.2.3" from nuxt@4.4.2
+      node_modules/nuxt
+        peer nuxt@"^4.4.2" from @nuxt/nitro-server@4.4.2
+        node_modules/@nuxt/nitro-server
+          @nuxt/nitro-server@"4.4.2" from nuxt@4.4.2
+        peer nuxt@"4.4.2" from @nuxt/vite-builder@4.4.2
+        node_modules/@nuxt/vite-builder
+          @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+        nuxt@"^4.4.2" from the root project
+  vite@"^7.3.1" from @nuxt/vite-builder@4.4.2
+  node_modules/@nuxt/vite-builder
+    @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+  peer vite@"^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" from @vitejs/plugin-vue@6.0.6
+  node_modules/@vitejs/plugin-vue
+    @vitejs/plugin-vue@"^6.0.4" from @nuxt/vite-builder@4.4.2
+    node_modules/@nuxt/vite-builder
+      @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+  peer vite@"^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" from @vitejs/plugin-vue-jsx@5.1.5
+  node_modules/@vitejs/plugin-vue-jsx
+    @vitejs/plugin-vue-jsx@"^5.1.4" from @nuxt/vite-builder@4.4.2
+    node_modules/@nuxt/vite-builder
+      @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+  peer vite@"^2.9.0 || ^3.0.0-0 || ^4.0.0-0 || ^5.0.0-0 || ^6.0.1 || ^7.0.0-0" from vite-dev-rpc@1.1.0
+  node_modules/vite-dev-rpc
+    vite-dev-rpc@"^1.1.0" from vite-plugin-inspect@11.3.3
+    node_modules/vite-plugin-inspect
+      vite-plugin-inspect@"^11.3.3" from @nuxt/devtools@3.2.4
+      node_modules/@nuxt/devtools
+        @nuxt/devtools@"^3.2.3" from nuxt@4.4.2
+        node_modules/nuxt
+          peer nuxt@"^4.4.2" from @nuxt/nitro-server@4.4.2
+          node_modules/@nuxt/nitro-server
+            @nuxt/nitro-server@"4.4.2" from nuxt@4.4.2
+          peer nuxt@"4.4.2" from @nuxt/vite-builder@4.4.2
+          node_modules/@nuxt/vite-builder
+            @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+          nuxt@"^4.4.2" from the root project
+  peer vite@"^2.6.0 || ^3.0.0 || ^4.0.0 || ^5.0.0-0 || ^6.0.0-0 || ^7.0.0-0" from vite-hot-client@2.1.0
+  node_modules/vite-hot-client
+    vite-hot-client@"^2.1.0" from vite-dev-rpc@1.1.0
+    node_modules/vite-dev-rpc
+      vite-dev-rpc@"^1.1.0" from vite-plugin-inspect@11.3.3
+      node_modules/vite-plugin-inspect
+        vite-plugin-inspect@"^11.3.3" from @nuxt/devtools@3.2.4
+        node_modules/@nuxt/devtools
+          @nuxt/devtools@"^3.2.3" from nuxt@4.4.2
+          node_modules/nuxt
+            peer nuxt@"^4.4.2" from @nuxt/nitro-server@4.4.2
+            node_modules/@nuxt/nitro-server
+              @nuxt/nitro-server@"4.4.2" from nuxt@4.4.2
+            peer nuxt@"4.4.2" from @nuxt/vite-builder@4.4.2
+            node_modules/@nuxt/vite-builder
+              @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+            nuxt@"^4.4.2" from the root project
+  vite@"^7.3.1" from vite-node@5.3.0
+  node_modules/vite-node
+    vite-node@"^5.3.0" from @nuxt/vite-builder@4.4.2
+    node_modules/@nuxt/vite-builder
+      @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+  peer vite@">=5.4.21" from vite-plugin-checker@0.12.0
+  node_modules/vite-plugin-checker
+    vite-plugin-checker@"^0.12.0" from @nuxt/vite-builder@4.4.2
+    node_modules/@nuxt/vite-builder
+      @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+  peer vite@"^6.0.0 || ^7.0.0-0" from vite-plugin-inspect@11.3.3
+  node_modules/vite-plugin-inspect
+    vite-plugin-inspect@"^11.3.3" from @nuxt/devtools@3.2.4
+    node_modules/@nuxt/devtools
+      @nuxt/devtools@"^3.2.3" from nuxt@4.4.2
+      node_modules/nuxt
+        peer nuxt@"^4.4.2" from @nuxt/nitro-server@4.4.2
+        node_modules/@nuxt/nitro-server
+          @nuxt/nitro-server@"4.4.2" from nuxt@4.4.2
+        peer nuxt@"4.4.2" from @nuxt/vite-builder@4.4.2
+        node_modules/@nuxt/vite-builder
+          @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+        nuxt@"^4.4.2" from the root project
+  peer vite@"^6.0.0 || ^7.0.0" from vite-plugin-vue-tracer@1.3.0
+  node_modules/vite-plugin-vue-tracer
+    vite-plugin-vue-tracer@"^1.3.0" from @nuxt/devtools@3.2.4
+    node_modules/@nuxt/devtools
+      @nuxt/devtools@"^3.2.3" from nuxt@4.4.2
+      node_modules/nuxt
+        peer nuxt@"^4.4.2" from @nuxt/nitro-server@4.4.2
+        node_modules/@nuxt/nitro-server
+          @nuxt/nitro-server@"4.4.2" from nuxt@4.4.2
+        peer nuxt@"4.4.2" from @nuxt/vite-builder@4.4.2
+        node_modules/@nuxt/vite-builder
+          @nuxt/vite-builder@"4.4.2" from nuxt@4.4.2
+        nuxt@"^4.4.2" from the root project
+
+Could not resolve dependency:
+@vercel/analytics@"*" from the root project
+
+Conflicting peer dependency: vite@8.0.13
+node_modules/vite
+  peer vite@"^8.0.0-beta.7 || ^8.0.0" from @sveltejs/vite-plugin-svelte@7.1.2
+  node_modules/@sveltejs/vite-plugin-svelte
+    peer @sveltejs/vite-plugin-svelte@"^3.0.0 || ^4.0.0-next.1 || ^5.0.0 || ^6.0.0-next.0 || ^7.0.0" from @sveltejs/kit@2.60.1
+    node_modules/@sveltejs/kit
+      peerOptional @sveltejs/kit@"^1 || ^2" from @vercel/analytics@2.0.1
+      node_modules/@vercel/analytics
+        @vercel/analytics@"*" from the root project
+
+Fix the upstream dependency conflict, or retry
+this command with --force or --legacy-peer-deps
+to accept an incorrect (and potentially broken) dependency resolution.
