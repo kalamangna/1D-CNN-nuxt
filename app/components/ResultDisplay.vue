@@ -344,17 +344,16 @@ const initCharts = () => {
     }
   })
 
-  const createSet = (vCanv, iCanv, unit, vB, iB) => {
-    if (!vCanv || !iCanv) return
-
-    const vC = new Chart(vCanv.getContext('2d'), {
+  const createChart = (canvas, unit, base, dataStart, colorSet) => {
+    if (!canvas) return
+    const chart = new Chart(canvas.getContext('2d'), {
       type: 'line',
       data: {
         labels,
         datasets: [
-          { label: 'Va', data: props.signals.map(r => r[1]), borderColor: '#0055aa', borderWidth: 2, pointRadius: 0, tension: 0.2 },
-          { label: 'Vb', data: props.signals.map(r => r[2]), borderColor: '#ee0000', borderWidth: 2, pointRadius: 0, tension: 0.2 },
-          { label: 'Vc', data: props.signals.map(r => r[3]), borderColor: '#00aa00', borderWidth: 2, pointRadius: 0, tension: 0.2 }
+          { label: colorSet[0].label, data: props.signals.map(r => r[dataStart]), borderColor: colorSet[0].color, borderWidth: 2, pointRadius: 0, tension: 0.2 },
+          { label: colorSet[1].label, data: props.signals.map(r => r[dataStart + 1]), borderColor: colorSet[1].color, borderWidth: 2, pointRadius: 0, tension: 0.2 },
+          { label: colorSet[2].label, data: props.signals.map(r => r[dataStart + 2]), borderColor: colorSet[2].color, borderWidth: 2, pointRadius: 0, tension: 0.2 }
         ]
       },
       options: { 
@@ -362,33 +361,27 @@ const initCharts = () => {
         maintainAspectRatio: false, 
         layout: { padding: { left: 0, right: 10, top: 10, bottom: 0 } },
         plugins: { legend: { display: false } }, 
-        scales: commonScales(unit, vB) 
+        scales: commonScales(unit, base) 
       }
     })
-
-    const iC = new Chart(iCanv.getContext('2d'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          { label: 'Ia', data: props.signals.map(r => r[4]), borderColor: '#0055aa', borderWidth: 2, pointRadius: 0, tension: 0.2 },
-          { label: 'Ib', data: props.signals.map(r => r[5]), borderColor: '#ee0000', borderWidth: 2, pointRadius: 0, tension: 0.2 },
-          { label: 'Ic', data: props.signals.map(r => r[6]), borderColor: '#00aa00', borderWidth: 2, pointRadius: 0, tension: 0.2 }
-        ]
-      },
-      options: { 
-        responsive: true, 
-        maintainAspectRatio: false, 
-        layout: { padding: { left: 0, right: 10, top: 10, bottom: 0 } },
-        plugins: { legend: { display: false } }, 
-        scales: commonScales(unit, iB) 
-      }
-    })
-    charts.push(vC, iC)
+    charts.push(chart)
   }
 
-  if (vPuCanvas.value && iPuCanvas.value) createSet(vPuCanvas.value, iPuCanvas.value, 'p.u.', 1, 1)
-  if (vPhysCanvas.value && iPhysCanvas.value) createSet(vPhysCanvas.value, iPhysCanvas.value, 'kV', V_BASE, I_BASE)
+  const vColors = [
+    { label: 'Va', color: '#0055aa' },
+    { label: 'Vb', color: '#ee0000' },
+    { label: 'Vc', color: '#00aa00' }
+  ]
+  const iColors = [
+    { label: 'Ia', color: '#0055aa' },
+    { label: 'Ib', color: '#ee0000' },
+    { label: 'Ic', color: '#00aa00' }
+  ]
+
+  if (vPuCanvas.value) createChart(vPuCanvas.value, 'p.u.', 1, 1, vColors)
+  if (iPuCanvas.value) createChart(iPuCanvas.value, 'p.u.', 1, 4, iColors)
+  if (vPhysCanvas.value) createChart(vPhysCanvas.value, 'kV', V_BASE, 1, vColors)
+  if (iPhysCanvas.value) createChart(iPhysCanvas.value, 'kA', I_BASE, 4, iColors)
 }
 
 onMounted(() => {
