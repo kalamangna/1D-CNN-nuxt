@@ -118,7 +118,7 @@
                  <div class="flex justify-between items-center">
                     <div class="flex items-center gap-4">
                        <span class="w-1.5 h-6 bg-indigo-500 rounded-full"></span>
-                       <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest italic">Normalized Signal <span class="text-slate-400 font-normal ml-2 text-xs">(p.u.)</span></h4>
+                       <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest italic">Signal <span class="text-slate-400 font-normal ml-2 text-xs">(p.u.)</span></h4>
                     </div>
                     <div class="flex gap-4">
                        <button @click="openModal('vPu')" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-indigo-600 transition-all flex items-center justify-center shadow-sm"><i class="fa-solid fa-bolt-lightning text-xs"></i></button>
@@ -136,7 +136,7 @@
                  <div class="flex justify-between items-center">
                     <div class="flex items-center gap-4">
                        <span class="w-1.5 h-6 bg-rose-500 rounded-full"></span>
-                       <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest italic">Physical Signal <span class="text-slate-400 font-normal ml-2 text-xs">(kV / kA)</span></h4>
+                       <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest italic">Signal <span class="text-slate-400 font-normal ml-2 text-xs">(kV / kA)</span></h4>
                     </div>
                     <div class="flex gap-4">
                        <button @click="openModal('vPhys')" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-rose-600 transition-all flex items-center justify-center shadow-sm"><i class="fa-solid fa-bolt-lightning text-xs"></i></button>
