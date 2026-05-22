@@ -114,10 +114,10 @@
                </div>
                <div class="p-8 space-y-4">
                   <img 
-                    :src="`${API_BASE_URL}/artifacts/binary_confusion_matrix.png`" 
+                    src="/results/binary_confusion_matrix.png" 
                     alt="Binary Confusion Matrix" 
                     class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm cursor-zoom-in hover:scale-[1.02] transition-transform duration-500"
-                    @click="openImage(`${API_BASE_URL}/artifacts/binary_confusion_matrix.png`)"
+                    @click="openImage('/results/binary_confusion_matrix.png')"
                   >
                   <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Visualization of the model's overall performance in distinguishing between Normal and Fault conditions.</p>
                </div>
@@ -131,10 +131,10 @@
                </div>
                <div class="p-8 space-y-4">
                   <img 
-                    :src="`${API_BASE_URL}/artifacts/confusion_matrix.png`" 
+                    src="/results/confusion_matrix.png" 
                     alt="Multi-Class Confusion Matrix" 
                     class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm cursor-zoom-in hover:scale-[1.02] transition-transform duration-500"
-                    @click="openImage(`${API_BASE_URL}/artifacts/confusion_matrix.png`)"
+                    @click="openImage('/results/confusion_matrix.png')"
                   >
                   <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Detailed prediction accuracy for each specific fault type (e.g., A-G, B-C, 3PH).</p>
                </div>
@@ -151,10 +151,10 @@
                </div>
                <div class="p-8 space-y-4">
                   <img 
-                    :src="`${API_BASE_URL}/artifacts/training_curves.png`" 
+                    src="/results/training_curves.png" 
                     alt="Training Curves" 
                     class="w-full h-auto rounded-2xl border border-slate-100 shadow-sm cursor-zoom-in hover:scale-[1.02] transition-transform duration-500"
-                    @click="openImage(`${API_BASE_URL}/artifacts/training_curves.png`)"
+                    @click="openImage('/results/training_curves.png')"
                   >
                   <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Comparison graphs of Loss and Accuracy between Training and Validation data to monitor model stability and convergence.</p>
                </div>
