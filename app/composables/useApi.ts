@@ -28,14 +28,22 @@ export const useApi = () => {
 
   /**
    * Fetches model performance metrics.
+   * Prioritizes local results/metrics.json if available.
    */
   const getMetrics = async () => {
     try {
-      const response = await $fetch(`${API_BASE_URL}/metrics`)
-      return response
-    } catch (error) {
-      console.error('API Error (getMetrics):', error)
-      throw error
+      // First try local results folder in public/
+      const localResponse = await $fetch('/results/metrics.json')
+      return localResponse
+    } catch (localError) {
+      console.warn('Local metrics not found, falling back to API:', localError)
+      try {
+        const apiResponse = await $fetch(`${API_BASE_URL}/metrics`)
+        return apiResponse
+      } catch (apiError) {
+        console.error('API Error (getMetrics):', apiError)
+        throw apiError
+      }
     }
   }
 
