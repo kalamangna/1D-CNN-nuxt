@@ -141,6 +141,52 @@
             </section>
          </div>
 
+         <!-- Middle Row: Detailed Regression Metrics -->
+         <div class="grid grid-cols-1 gap-10">
+            <section class="bg-white rounded-[3rem] border border-slate-200 shadow-2xl overflow-hidden">
+               <div class="px-10 py-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                  <div class="flex items-center gap-4">
+                     <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
+                        <i class="fa-solid fa-location-crosshairs text-sm"></i>
+                     </div>
+                     <div>
+                        <h3 class="text-xs font-black text-slate-900 uppercase tracking-[0.2em] mb-0.5">Location Precision</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detailed RMSE Convergence (KM)</p>
+                     </div>
+                  </div>
+                  <div class="px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-indigo-100">
+                     Target: &lt; 0.20 KM
+                  </div>
+               </div>
+               <div class="p-10">
+                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+                     <div class="lg:col-span-2">
+                        <img 
+                          src="/results/location_rmse_detailed.png" 
+                          alt="Detailed Location RMSE" 
+                          class="w-full h-auto rounded-[2rem] border border-slate-100 shadow-sm cursor-zoom-in hover:scale-[1.01] transition-transform duration-500"
+                          @click="openImage('/results/location_rmse_detailed.png')"
+                        >
+                     </div>
+                     <div class="space-y-8">
+                        <div class="space-y-2">
+                           <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Final Accuracy</p>
+                           <p class="text-5xl font-black text-slate-900 tracking-tighter" v-if="metrics">
+                              {{ metrics.location_rmse.toFixed(4) }}<span class="text-xl text-slate-300 ml-1">KM</span>
+                           </p>
+                        </div>
+                        <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100 space-y-4">
+                           <h4 class="text-[10px] font-black text-slate-900 uppercase tracking-widest">Regression Insight</h4>
+                           <p class="text-[11px] text-slate-500 leading-relaxed">
+                              The model uses a dedicated regression head to estimate the exact point of failure on the 5.0 KM transmission line. The current error represents approximately <span class="text-indigo-600 font-bold">{{ ((metrics?.location_rmse || 0) / 5 * 100).toFixed(1) }}%</span> of the total line length.
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </section>
+         </div>
+
          <!-- Bottom Row: Training Curves & Context -->
          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <!-- Training Curves (PNG) -->
